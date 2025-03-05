@@ -1,16 +1,34 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="container mx-auto max-w-lg mt-10">
-    <h2 class="text-2xl font-bold mb-5">Register</h2>
-    <form method="POST">
+<div class="container">
+    <h2>Register</h2>
+    <form method="post">
         {% csrf_token %}
-        <div class="space-y-4">
-            {{ form.as_p }}
-        </div>
-        <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded btn  ">
-            Register
-        </button>
+        {{ form.as_p }}
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var statusField = document.querySelector("[name='current_status']");
+                var experienceField = document.querySelector("[name='experience_years']").closest("p");
+        
+                function toggleExperienceField() {
+                    if (statusField.value === "experienced") {
+                        experienceField.style.display = "block";
+                        document.querySelector("[name='experience_years']").required = true;
+                    } else {
+                        experienceField.style.display = "none";
+                        document.querySelector("[name='experience_years']").required = false;
+                    }
+                }
+        
+                statusField.addEventListener("change", toggleExperienceField);
+                toggleExperienceField();
+            });
+        </script>
+        
+
+        <button type="submit" class="btn">Register</button>
     </form>
 </div>
 {% endblock %}
