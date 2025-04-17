@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Update Your Profile</h2>
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" name="first_name" class="form-control" value="{{ candidate.user.first_name }}" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="middle_name" class="form-label">Middle Name</label>
+                <input type="text" name="middle_name" class="form-control" value="{{ candidate.user.middle_name|default:'' }}" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" name="last_name" class="form-control" value="{{ candidate.user.last_name }}" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="date_of_birth" class="form-label">Date of Birth</label>
+            <input type="date" name="date_of_birth" class="form-control" value="{{ candidate.user.date_of_birth|date:'Y-m-d' }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="education_details" class="form-label">Education Details</label>
+            <textarea name="education_details" class="form-control" rows="3">{{ candidate.education_details }} </textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="certifications" class="form-label">Certifications</label>
+            <textarea name="certifications" class="form-control" rows="3">{{ candidate.certifications }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <textarea name="address" class="form-control" rows="2">{{ candidate.address }} ></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="current_status" class="form-label">Current Status</label>
+            <input type="text" name="current_status" class="form-control" value="{{ candidate.current_status }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="profile_photo" class="form-label">Profile Photo</label>
+            <input type="file" name="profile_photo" class="form-control" required>
+            {% if candidate.profile_photo %}
+            <small class="form-text text-muted">
+                Current Photo: <a href="{{ candidate.profile_photo.url }}" target="_blank">View Photo</a>
+            </small>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="resume" class="form-label">Resume (PDF)</label>
+            <input type="file" name="resume" class="form-control" required>
+            {% if candidate.resume %}
+            <small class="form-text text-muted">
+                Current Resume: <a href="{{ candidate.resume.url }}" target="_blank">View Resume</a>
+            </small>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{% url 'candidate_dashboard' %}" class="btn btn-secondary ms-2">Back to Dashboard</a>
+    </form>
+</div>
+{% endblock %}

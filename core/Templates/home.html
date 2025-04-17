@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="container mt-5">
+
+  <!-- Hero Section -->
+  <div class="jumbotron text-center py-5 bg-light rounded">
+    <h1 class="display-4">Welcome to the JobDhundo!</h1>
+    <p class="lead">Find your dream job or hire top talent.</p>
+    {% if not user.is_authenticated %}
+    <div class="mt-4">
+      <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-2">Login</a>
+      <a href="{% url 'candidate_register' %}" class="btn btn-success btn-lg me-2">Register as Candidate</a>
+      <a href="{% url 'recruiter_register' %}" class="btn btn-secondary btn-lg">Register as Recruiter</a>
+    </div>
+    {% else %}
+    <p class="mt-3">Hello, <strong>{{ user.first_name }}</strong>!</p>
+    <a href="{% url 'user_dashboard' %}" class="btn btn-warning btn-lg">Dashboard</a>
+    <a href="{% url 'logout' %}" class="btn btn-danger btn-lg">Logout</a>
+    {% endif %}
+  </div>
+
+  
+
+  <!-- Our Recruiters Section -->
+  <h2 style="text-align:center;">Our Recruiters</h2>
+  <div id="recruiterCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner">
+        {% for recruiter in recruiters %}
+        {% if forloop.counter0|divisibleby:3 %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="row justify-content-center">
+                {% endif %}
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            {% if recruiter.company_logo %}
+                            <img src="{{ recruiter.company_logo.url }}" alt="Company Logo"
+                                class="img-fluid mb-3" style="max-height: 120px;">
+                            {% else %}
+                            <img src="{% static 'default_company.png' %}" alt="No Logo"
+                                class="img-fluid mb-3" style="max-height: 120px;">
+                            {% endif %}
+                            <h5 class="card-title">{{ recruiter.company_name }}</h5>
+                            <p class="card-text">Established: {{ recruiter.established_year|default:"N/A" }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                          <a href="{% url 'company_profile' recruiter.id %}" class="btn btn-outline-primary btn-sm">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <!-- Duplicate items for infinite carousel -->
+        {% for recruiter in recruiters %}
+        {% if forloop.counter0|divisibleby:3 %}
+        <div class="carousel-item">
+            <div class="row justify-content-center">
+                {% endif %}
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            {% if recruiter.company_logo %}
+                            <img src="{{ recruiter.company_logo.url }}" alt="Company Logo"
+                                class="img-fluid mb-3" style="max-height: 120px;">
+                            {% else %}
+                            <img src="{% static 'default_company.png' %}" alt="No Logo"
+                                class="img-fluid mb-3" style="max-height: 120px;">
+                            {% endif %}
+                            <h5 class="card-title">{{ recruiter.company_name }}</h5>
+                            <p class="card-text">Established: {{ recruiter.established_year|default:"N/A" }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <a href="#" class="btn btn-outline-primary btn-sm">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <!-- Latest Jobs Section -->
+    <div class="mt-5">
+        <h2 class="mb-4">Latest Jobs</h2>
+        {% if jobs %}
+        <div class="row">
+          {% for job in jobs|slice:":10" %}
+          <div class="col-12 mb-4">
+            <div class="card shadow-sm p-3 h-100 text-center text-md-start">
+              <div class="row g-0 align-items-center">
+                <!-- Company Logo -->
+                <div class="col-12 col-md-3 mb-3 mb-md-0 d-flex justify-content-center">
+                  {% if job.posted_by.company_logo %}
+                    <img src="{{ job.posted_by.company_logo.url }}" alt="Company Logo" class="img-fluid" style="max-height: 120px; object-fit: contain;">
+                  {% else %}
+                    <img src="{% static 'default_company.png' %}" alt="No Logo" class="img-fluid" style="max-height: 120px; object-fit: contain;">
+                  {% endif %}
+                </div>
+      
+                <!-- Job Details with spacing -->
+                <div class="col-12 col-md-6 ms-md-4">
+                  <h5 class="card-title">{{ job.title }}</h5>
+                  <p class="card-text mb-1"><strong>Company:</strong> {{ job.posted_by.company_name }}</p>
+                  <p class="card-text"><strong>Location:</strong> {{ job.location }}</p>
+                </div>
+      
+                <!-- Button -->
+                <div class="col-12 col-md-2 mt-3 mt-md-0 text-center text-md-end">
+                  <a href="{% url 'job_details' job.id %}" class="btn btn-primary btn-sm">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <div class="alert alert-info" role="alert">
+            No jobs available at the moment. Please check back later.
+          </div>
+        {% endif %}
+      </div>
+      
+      
+      
+      
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var myCarousel = document.querySelector('#recruiterCarousel');
+    if (myCarousel) {
+        var carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 5000,
+            ride: 'carousel',
+            wrap: true // Ensures infinite looping
+        });
+    }
+});
+</script>
+  
+</div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Create a New Job</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Job Title" class="form-control" required>
+    <textarea name="description" placeholder="Job Description" class="form-control mt-2" required></textarea>
+    <textarea name="requirements" placeholder="Requirements" class="form-control mt-2"></textarea>
+    <input type="text" name="location" placeholder="Location" class="form-control mt-2" required>
+    <input type="number" name="salary" placeholder="Salary (optional but in whole or float number)" class="form-control mt-2" required>
+    
+    <label for="job_type">Job Type</label>
+    <select name="job_type" class="form-control mt-2" required>
+        <option value="fresher">Fresher</option>
+        <option value="experience">Experienced</option>
+        <option value="Full-time">Full-time</option>
+        <option value="Part-time">Part-time</option>
+    </select>
+
+    <button type="submit" class="btn btn-success mt-3">Create Job</button>
+</form>
+{% endblock %}

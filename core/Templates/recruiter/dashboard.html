@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <!-- Recruiter Profile Header -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-3 text-center">
+      {% if recruiter.company_logo %}
+        <img src="{{ recruiter.company_logo.url }}" alt="Company Logo" class="img-fluid rounded-circle" style="max-height: 150px;">
+      {% else %}
+        <img src="https://via.placeholder.com/150?text=No+Logo" alt="No Logo" class="img-fluid rounded-circle">
+      {% endif %}
+    </div>
+    <div class="col-md-9">
+      <h2>Welcome, {{ recruiter.user.first_name }}!</h2>
+      <h4>{{ recruiter.company_name }}</h4>
+      <p class="mb-1">
+        {% if recruiter.established_year %}Established: {{ recruiter.established_year }}{% endif %}
+        {% if recruiter.company_address %} | Address: {{ recruiter.company_address }}{% endif %}
+        {% if recruiter.hr_name %} | HR: {{ recruiter.hr_name }}{% endif %}
+      </p>
+      <a href="{% url 'update_recruiter_profile' %}" class="btn btn-outline-primary btn-sm">Update Profile</a>
+    </div>
+  </div>
+
+  <!-- Job Postings Section -->
+  <div class="mb-4">
+    <h3>Your Job Postings</h3>
+    {% if jobs %}
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-light">
+            <tr>
+              <th>Title</th>
+              <th>Location</th>
+              <th>Salary</th>
+              <th>Posted At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job in jobs %}
+              <tr>
+                <td>{{ job.title }}</td>
+                <td>{{ job.location }}</td>
+                <td>{{ job.salary|default:"N/A" }}</td>
+                <td>{{ job.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                  <a href="{% url 'delete_job' job.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this job?');">Delete</a>
+                  <a href="{% url 'update_job' job.id %}" class="btn btn-sm btn-warning">Edit</a>
+                  <a href="{% url 'job_applicants' job.id %}" class="btn btn-info btn-sm">View Applicants</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info" role="alert">
+        You have no job postings yet.
+      </div>
+    {% endif %}
+  </div>
+
+  <a href="{% url 'create_job' %}" class="btn btn-primary">Post a New Job</a>
+</div>
+{% endblock %}

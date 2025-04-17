@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card p-4">
+    <h2>Candidate Registration</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="first_name" placeholder="First Name" class="form-control" required>
+        <input type="text" name="middle_name" placeholder="Middle Name (optional)" class="form-control mt-2">
+        <input type="text" name="last_name" placeholder="Last Name" class="form-control mt-2" required>
+        <input type="email" name="email" placeholder="Email" class="form-control mt-2" required>
+        <input type="password" name="password" placeholder="Password" class="form-control mt-2" required>
+        <button type="submit" class="btn btn-success mt-3">Register</button>
+    </form>
+</div>
+{% endblock %}

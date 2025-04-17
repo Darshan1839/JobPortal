@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Candidate Profile Details</h2>
+    
+    <div class="card p-4">
+        <h4>{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h4>
+        <p><strong>Email:</strong> {{ candidate.user.email }}</p>
+        <p><strong>Date of Birth:</strong> {{ candidate.user.date_of_birth|date:"Y-m-d" }}</p>
+        <p><strong>Education Details:</strong> {{ candidate.education_details|default:"Not provided" }}</p>
+        <p><strong>Certifications:</strong> {{ candidate.certifications|default:"Not provided" }}</p>
+        <p><strong>Address:</strong> {{ candidate.address|default:"Not provided" }}</p>
+        <p><strong>Current Status:</strong> {{ candidate.current_status|default:"Not provided" }}</p>
+        {% if candidate.profile_photo %}
+            <p><strong>Profile Photo:</strong> <img src="{{ candidate.profile_photo.url }}" alt="Profile Photo" width="150"></p>
+        {% endif %}
+        {% if candidate.resume %}
+        <a href="{{ candidate.resume.url }}" target="_blank">View Resume</a>
+    {% else %}
+        N/A
+    {% endif %}
+    
+    </div>
+    
+    <a href="{% url 'job_applicants' job_id=0 %}" class="btn btn-secondary mt-3" onclick="history.back(); return false;">Back</a>
+</div>
+{% endblock %}

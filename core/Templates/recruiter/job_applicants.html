@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Applicants for "{{ job.title }}"</h2>
+    
+    {% if applications %}
+      <div class="table-responsive mt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Candidate Name</th>
+              <th>Email</th>
+              <th>Education</th>
+              <th>Certifications</th>
+              <th>Cover Letter</th>
+              <th>Resume</th>
+              <th>Applied At</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for app in applications %}
+            <tr>
+              <td>{{ app.candidate.user.first_name }} {{ app.candidate.user.last_name }}</td>
+              <td>{{ app.candidate.user.email }}</td>
+              <td>{{ app.candidate.education_details|default:"N/A" }}</td>
+              <td>{{ app.candidate.certifications|default:"N/A" }}</td>
+              <td>{{ app.cover_letter|default:"No cover letter provided" }}</td>
+              <td>
+                {% if app.candidate.resume %}
+                  <a href="{{ app.candidate.resume.url }}" target="_blank">View Resume</a>
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>{{ app.applied_at|date:"Y-m-d H:i" }}</td>
+              <td>
+                <a href="{% url 'view_candidate_profile' candidate_id=app.candidate.id %}" class="btn btn-info btn-sm">View Profile</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>No applications for this job yet.</p>
+    {% endif %}
+    
+    <a href="{% url 'recruiter_dashboard' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

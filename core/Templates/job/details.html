@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            <!-- Job Header Card -->
+            <div class="card p-4 mb-4 shadow-sm">
+                <div class="d-flex align-items-center mb-3">
+                    {% if job.posted_by.company_logo %}
+                        <img src="{{ job.posted_by.company_logo.url }}" alt="{{ job.company_name }} Logo"
+                             class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light d-flex justify-content-center align-items-center rounded me-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-building text-secondary fs-3"></i>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h2 class="mb-1">{{ job.title }}</h2>
+                        <h5 class="text-muted">{{ job.company_name }}</h5>
+                    </div>
+                </div>
+                <ul class="list-unstyled mb-4">
+                    <li class="card-text mb-1"><strong><i class="fa-solid fa-building" style="color: #B197FC;"></i> Company:</strong> {{ job.posted_by.company_name }}</li>
+
+                    <li class="mb-2"><strong>📍 Location:</strong> {{ job.location }}</li>
+                    <li class="mb-2"><strong>💰 Salary:</strong> {{ job.salary|default:"Not disclosed" }}  Upto</li>
+                    <li class="mb-2"><strong>🕒 Job Type:</strong> {{ job.job_type|default:"Not specified"|capfirst }}</li>
+                    <li class="mb-2"><strong>🧑‍💼 Posted by:</strong> {{ job.posted_by.user.first_name }} {{ job.posted_by.user.last_name }}</li>
+                    <li class="mb-2"><strong>🕓 Posted on:</strong> {{ job.created_at|date:"F j, Y, g:i A" }}</li>
+                </ul>
+
+                
+
+                <div>
+                    <h5 class="mt-3">📝 Job Description</h5>
+                    <p class="text-muted">{{ job.description }}</p>
+
+                    <h5 class="mt-4">📌 Requirements</h5>
+                    <p class="text-muted">{{ job.requirements }}</p>
+                </div>
+
+                {% if request.user.is_authenticated and user.role == "candidate" %}
+                <div class="mt-4 d-flex flex-wrap gap-2">
+                    {% if not applied %}
+                        <a href="{% url 'apply_job' job.id %}" class="btn btn-success">Apply Now</a>
+                    {% else %}
+                        <button class="btn btn-secondary" disabled>Already Applied</button>
+                    {% endif %}
+
+                    {% if saved %}
+                        <a href="{% url 'unsave_job' job.id %}" class="btn btn-warning">Unsave Job</a>
+                    {% else %}
+                        <a href="{% url 'save_job' job.id %}" class="btn btn-info">Save Job</a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <p class="text-muted mt-3"><em>Login as a candidate to apply or save this job.</em></p>
+                {% endif %}
+            </div>
+
+            <!-- Back Button -->
+            {% if request.user.is_authenticated and request.user.role == 'candidate' %}
+                <a href="{% url 'candidate_dashboard' %}" class="btn btn-outline-secondary mt-3">
+                    ← Back to Dashboard
+                </a>
+            {% else %}
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary mt-3">
+                    ← Back to Home
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

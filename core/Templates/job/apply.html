@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Apply for {{ job.title }}</h2>
+
+    <div class="card p-4">
+        <h4 class="text-muted">{{ job.company_name }}</h4>
+        <p><strong>Location:</strong> {{ job.location }}</p>
+        <p><strong>Salary:</strong> {{ job.salary|default:"Not disclosed" }}</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="cover_letter" class="form-label">Cover Letter (Optional)</label>
+                <textarea
+                    id="cover_letter"
+                    name="cover_letter"
+                    class="form-control"
+                    rows="5"
+                    placeholder="Write a cover letter to stand out!"
+                ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit Application</button>
+            <a href="{% url 'job_details' job.id %}" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
