@@ -19,7 +19,7 @@ from datetime import datetime
 def home(request):
     jobs = Job.objects.all().order_by('-created_at')
     recruiters = Recruiter.objects.all()
-    return render(request, 'core/templates/home.html', {'jobs': jobs, 'recruiters': recruiters})
+    return render(request, 'home.html', {'jobs': jobs, 'recruiters': recruiters})
 
 
 def aboutus(request):
