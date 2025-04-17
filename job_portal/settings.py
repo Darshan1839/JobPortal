@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-&_p#b*i@zd217!-*to6d$_&mg(5k6ca=9p^5i&su2i2m02!f9o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["job_portal.onrender.com","127.0.0.1"]
+<<<<<<< HEAD
+=======
+ALLOWED_HOSTS = ["jobportal-1-io1y.onrender.com"]
+>>>>>>> b93eda1f59a4d5b9c72403cbb6dca72c3c07863e
 
 
 # Application definition
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'job_portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["Templates"],
+        'DIRS': [BASE_DIR / 'core' / 'Templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
