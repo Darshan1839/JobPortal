@@ -40,8 +40,8 @@ urlpatterns = [
     path('privacypolicy/', views.privacypoliccy, name='pp'),
     path('TermsofServices/', views.ts, name='TOS'),
     path('job/update/<int:job_id>/', views.update_job, name='update_job'),
-
-
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('reset-password/<int:user_id>/', views.reset_password, name='reset_password'),
 
 
 

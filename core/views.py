@@ -151,6 +151,53 @@ def user_login(request):
     return render(request, 'login.html')
 
 
+from django.shortcuts import render, redirect
+from core.models import User
+from django.contrib import messages
+
+def forgot_password(request):
+    if request.method == "POST":
+        # Retrieve the username and email from the POST data
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+
+        # Try to get the user based on the username and email
+        try:
+            user = User.objects.get(username=username, email=email)
+
+            # If user is found, redirect to reset password page
+            messages.success(request, "We found your account! Please create a new password.")
+            return redirect('reset_password', user_id=user.id)
+        except User.DoesNotExist:
+            # If no user is found with that combination
+            messages.error(request, "No user found with this username and email combination.")
+            return redirect('forgot_password')
+
+    # Render forgot password form
+    return render(request, 'auth/forgot_password.html')
+
+
+def reset_password(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        messages.error(request, "User not found.")
+        return redirect('forgot_password')
+
+    if request.method == "POST":
+        # Get the new password from the POST data
+        new_password = request.POST.get("new_password")
+        if new_password:
+            # Set the new password and save the user
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, "Your password has been reset successfully!")
+            return redirect('login')
+        else:
+            messages.error(request, "Please enter a valid password.")
+
+    # Render reset password form
+    return render(request, 'auth/reset_password.html', {'user_id': user.id})
 
 
 # Candidate Dashboard
